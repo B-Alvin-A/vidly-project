@@ -1,3 +1,6 @@
+require('express-async-errors')
+require('winston-mongodb')
+
 const winston = require('winston')
 
 const logger = winston.createLogger({
