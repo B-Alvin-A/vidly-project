@@ -1,7 +1,8 @@
 const mongoose = require('mongoose')
-const winston = require('winston')
+const config = require('config')
 
 module.exports = function(){
-    mongoose.connect('mongodb://127.0.0.1/vidlyDB')
-        .then(() => console.log('Connection to Vidly Database established...'))
+    const db = config.get('db')
+    mongoose.connect(db)
+        .then(() => console.log(`Connection to ${db} established...`))
 }

@@ -13,4 +13,6 @@ require('./startup/routes')(app)
 require('./startup/clientDataValidation')()
 
 const port = process.env.PORT || 7500
-app.listen(port, () => console.log(`Listening on port ${port}...`))
+
+const server = app.listen(port, () => console.log(`Listening on port ${port}...`))
+module.exports = server
