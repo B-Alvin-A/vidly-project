@@ -3,6 +3,7 @@ const express = require('express')
 const router = express.Router()
 const auth = require('../middleware/auth')
 const admin = require('../middleware/admin')
+const validate = require('../middleware/validate')
 
 router.get('/', async(req,res) => {
     res.send(await Genre.find().sort('name'))
@@ -14,22 +15,25 @@ router.get('/:id', async (req,res) => {
     res.send(genre)    
 })
 
-router.post('/', auth, async (req,res) => {
-    const { error } = validateGenre(req.body)
-    if(error) return res.status(400).send(error.details[0].message)
-    
-    const genre = new Genre({
+router.post('/', [ auth,validate(validateGenre) ], async (req,res) => {
+    let genre = await Genre.findOne({ name: req.body.name })
+    if( genre ) return res.status(400).send("Genre already exists")
+
+    genre = new Genre({
         name:req.body.name
     })
     await genre.save()
     res.send(genre)
 })
 
-router.put('/:id', auth, async (req,res) => {
+router.put('/:id', [ auth,validate(validateGenre) ], async (req,res) => {
     const{ error } = validateGenre(req.body)
     if(error) return res.status(400).send(error.details[0].message)
 
-    const genre = await Genre.findByIdAndUpdate(
+    let genre = await Genre.findOne({ name: req.body.name })
+    if( genre ) return res.status(400).send("Update failed!!!Genre already exists")
+
+    genre = await Genre.findByIdAndUpdate(
         req.params.id,
         {
             name:req.body.name

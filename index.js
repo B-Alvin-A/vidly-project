@@ -11,6 +11,7 @@ require('./startup/config')()
 require('./startup/db')()
 require('./startup/routes')(app)
 require('./startup/clientDataValidation')()
+require('./startup/prod')(app)
 
 const port = process.env.PORT || 7500
 

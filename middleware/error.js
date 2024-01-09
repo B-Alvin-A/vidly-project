@@ -3,7 +3,7 @@ const logger = require('../startup/logging')
 
 module.exports = function (err, req, res, next){
     if (err instanceof mongoose.Error.CastError) {
-        return res.status(400).send("Requested resource was not found!!!...");
+        return res.status(400).send("Invalid request!!!...");
     }
 
     logger.error({
